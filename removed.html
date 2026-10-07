@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Js by Ai!</title>
+  <style>
+    * {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        box-sizing: border-box;
+    }
+    
+    body {
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+      color: #ffff;
+      text-shadow: 2px 2px 8px rgba(0 , 0, 0, 0.7);
+      margin-bottom: 25;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 30px;
+    }
+
+    .btn button {
+        font-size: 16px;
+        font-weight: 600;
+        color: gray;
+        background: rgb(0, 0, 0);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 14px 28px;
+        border-radius: 14px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.30196078431372547);
+        transition: all 0.6s ease;
+    }
+
+    .btn button:hover {
+      color: white;
+      background: #4d4d4d;
+      transform: translateY(-4px);
+      text-shadow: 0 8px 18px rgba(0,0,0);
+    }
+    
+     .tombol-hari {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 30px;
+    }
+
+    .tombol-hari button{
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 14px 28px;
+        border-radius: 14px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.7s ease;
+    }
+
+    .tombol-hari button:hover {
+        background: #ffffff;
+        color: #1a1a1a;
+        transform: translateY(4px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2)
+    }
+
+    h3 {
+      color: white;
+      text-shadow: 4px 4px 10px rgba(0, 0, 0)
+    }
+
+    p {
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      text-shadow: 0 0 14px rgb(0, 0, 0)
+    }
+
+    input {
+      color: black;
+      text-shadow: 0 4px 16px rgba(0,0,0);
+      border: 1px solid rgb(246, 255, 67);
+      border-radius: 16px;
+      background: rgba(255,255,255);
+      font-size: 14px;
+      padding: 10px 18px;
+    }
+
+    li {
+      color: white;
+      text-shadow: 0 0 15px rgba(0,0,0);
+    }
+    </style>
+  </head>
+<body style="
+  color: black;
+  background-image: url('back/logo.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  ">
+<body>
+  <h1>Custom Jadwal Anda!</h1>
+  <p>Simpel Custom Jadwal!</p>
+  <div class="tombol-hari">
+  <button onclick="pilihHari('Senin')">Senin</button>
+  <button onclick="pilihHari('Selasa')">Selasa</button>
+  <button onclick="pilihHari('Rabu')">Rabu</button>
+  <button onclick="pilihHari('Kamis')">Kamis</button>
+  <button onclick="pilihHari('Jumat')">Jum'at</button>
+</div>
+
+<p id="sign"></p>
+
+<div class="btn">
+  <button onclick="Edita()">Edit Hari</button>
+  <button onclick="Reseted()">Reset All Customize!</button>
+</div>
+
+<div id="edited"></div>
+
+<script>
+  let hariDipilih = "";
+
+  function pilihHari(hari) {
+    hariDipilih = hari;
+    tampilkanJadwal();
+  }
+
+  function Edita() {
+    if (hariDipilih === "") {
+      alert("Pilih hari terlebih dahulu!");
+      return;
+    }
+
+    document.getElementById("edited").innerHTML = `
+      <input type="text" id="jadwalInput"
+        placeholder="Masukkan mata pelajaran">
+
+      <button onclick="Simpan()">Tambah</button>
+    `;
+
+    tampilkanJadwal();
+  }
+
+  function Simpan() {
+    const input = document.getElementById("jadwalInput").value.trim();
+
+    if (input === "") {
+      alert("Jadwal tidak boleh kosong!");
+      return;
+    }
+
+    // Ambil jadwal lama
+    let jadwal = JSON.parse(
+      localStorage.getItem("jadwal_" + hariDipilih)
+    ) || [];
+
+    // Tambahkan jadwal baru
+    jadwal.push(input);
+
+    // Simpan kembali
+    localStorage.setItem(
+      "jadwal_" + hariDipilih,
+      JSON.stringify(jadwal)
+    );
+
+    tampilkanJadwal();
+  }
+
+  function tampilkanJadwal() {
+    if (hariDipilih === "") return;
+
+    let jadwal = JSON.parse(
+      localStorage.getItem("jadwal_" + hariDipilih)
+    ) || [];
+
+    let hasil = `
+      <h3>Jadwal ${hariDipilih}</h3>
+    `;
+
+    if (jadwal.length === 0) {
+      hasil += `<p>Belum ada jadwal</p>`;
+    } else {
+      hasil += `<ol>`;
+
+      jadwal.forEach(function(item) {
+        hasil += `<li>${item}</li>`;
+      });
+
+      hasil += `</ol>`;
+    }
+
+    document.getElementById("edited").innerHTML = `
+      ${hasil}
+      <br>
+      <input type="text" id="jadwalInput"
+        placeholder="Tambah jadwal baru">
+
+      <button onclick="Simpan()">Tambah</button>
+    `;
+  }
+
+  function Reseted() {
+    localStorage.removeItem("jadwal_Senin");
+    localStorage.removeItem("jadwal_Selasa");
+    localStorage.removeItem("jadwal_Rabu");
+    localStorage.removeItem("jadwal_Kamis");
+    localStorage.removeItem("jadwal_Jumat");
+
+    hariDipilih = "";
+    document.getElementById("edited").innerHTML = "";
+    document.getElementById("sign").innerHTML = "";
+
+    alert("Semua jadwal berhasil dihapus!");
+  }
+</script>
+</body>
+</html>

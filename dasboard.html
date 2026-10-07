@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DasboardPage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif;
+        }
+      
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; 
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            border: 5px solid #808080; 
+            border-radius: 24px; 
+            padding: 40px 20px 140px 20px; 
+        }
+
+        .tombol-tambah {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 14px;
+          max-width: 600px;
+          margin-top: 25px;
+        }
+
+        .tombol-tambah button {
+          font-size: 15px;
+          font-weight: 560;
+          color: white;
+          text-shadow: 0 6px 12px rgba(0,0,0);
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.4);
+          border-radius: 14px;
+          padding: 16px 32px;
+          cursor: pointer;
+          transition: all 0.7s ease;
+        }
+
+      .tombol-tambah button:hover {
+        background: rgba(70, 69, 69);
+        color: white;
+        cursor: pointer;
+        transform: translateY(5px);
+      }
+      
+        .tombol-hari {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+        max-width: 600px;
+        margin-top: 30px;
+    }
+      
+        .tombol-hari button{
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 14px 28px;
+        border-radius: 14px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .tombol-hari button:hover {
+        background: #ffffff;
+        color: #1a1a1a;
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2)
+    }
+      
+        .navigation-menu {
+            position: fixed;
+            bottom: 30px; 
+            left: 50%;
+            transform: translateX(-50%); 
+            width: calc(100% - 60px);
+            max-width: 500px; 
+            display: flex;
+            justify-content: space-around; 
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            z-index: 999;
+        }
+
+        .menu-link {
+            position: relative;
+            text-decoration: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            z-index: 2;
+            transition: color 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            flex: 1; 
+        }
+
+        .menu-link.active { color: #fff; }
+
+        .sliding-indicator {
+            position: absolute;
+            height: calc(100% - 16px);
+            background-color: #808080;
+            border-radius: 25px;
+            z-index: 1;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+            top: 8px;
+            left: 8px;
+            width: 0;
+        }
+      
+        .content-area {
+            text-align: center;
+            color: #333;
+            width: 100%;
+            max-width: 600px;
+            display: none; 
+            animation: fadeIn 0.5s ease; 
+            margin-top: 10px; 
+        }
+
+        .content-area.active {
+            display: block;
+        }
+
+        .content-area ul {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(0,0,0);
+            background: transparent;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            backdrop-filter: blur(5px);
+            text-align: center;
+        }
+
+        .content-area h1, 
+        .content-area h2, 
+        .content-area h3 {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 25px;
+            color: #000;
+            text-shadow: 0 0 16px rgba(255,255,255,1);
+            font-weight: 600;
+            padding-bottom: 10px;
+        }
+
+        .content-area h1::after,
+        .content-area h2::after,
+        .content-area h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #808080, transparent);
+            border-radius: 2px;
+        }
+
+        .content-area h1 { font-size: 2.3rem; }
+        .content-area h2 { font-size: 1.8rem; }
+        .content-area h3 { font-size: 1.4rem; }
+
+        .content-area p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #fff;
+            text-shadow: 0 0 18px rgba(0,0,0) ;
+            background: transparent;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            backdrop-filter: blur(5px);
+            text-align: center;
+        }
+
+        span {
+          color: lab(0% 0 0);
+          text-shadow: 0 0 15px rgb(255, 255, 255);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+      
+    </style>
+</head>
+
+  <body style="
+    background-image: url('back/backoff.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    ">
+    
+<body>
+
+    <!-- Menu Navigasi Beranimasi -->
+    <div class="navigation-menu">
+        <div class="sliding-indicator" id="indicator"></div>
+        <a href="javascript:void(0)" class="menu-link active" data-target="page-beranda">
+          <img src="back/dasboard.png" alt="Dasboard"
+            style="width: 24px; height: auto;">
+        </a>
+        <a href="javascript:void(0)" class="menu-link" data-target="page-profil">
+          <img src="back/profil.png" alt="Profil"
+            style="width: 24px; height: auto;">
+        </a>
+        <a href="javascript:void(0)" class="menu-link" data-target="page-pesan">
+          <img src="back/pesan.png" alt="Pesan"
+            style="width: 24px; height: auto;">
+        </a>
+        <a href="javascript:void(0)" class="menu-link" data-target="page-pengaturan">
+          <img src="back/setting.png" alt="Pengaturan" style="width: 24px; height: auto;">
+        </a>
+    </div>
+
+    <!-- KUMPULAN HALAMAN KONTEN -->
+    
+    <!-- 1. Halaman Beranda -->
+    <div id="page-beranda" class="content-area active">
+        <h1>Home</h1>
+        <p>WELCOME SIR!</p>
+        <div class="tombol-tambah">
+          <button onclick="Jadwal()">Jadwal Menu</button>
+          <button onclick="Game()">Simpel Game Text</button>
+          <button onclick="Simpel()">Custom Jadwal Anda Sini!</button>
+        </div>
+    </div>
+
+    <!-- 2. Halaman Profil -->
+    <div id="page-profil" class="content-area">
+      <div id="namaanda">
+        <h2>Your Profile</h2>
+        <p>Username:<span id="user"></span></p>
+        <p>Password:<span id="pass"></span></p>
+      </div>
+    </div>
+
+    <!-- 3. Halaman Pesan -->
+    <div id="page-pesan" class="content-area">
+        <h3>Catalog Update</h3>
+        <ul>UPDATE AND IMPROVE!
+          <li>Update Profile User.</li>
+          <li>Jadwal Reset Button.</li>
+          <li>Penambahan Game Text (Beta Test)</li>
+        </ul>
+    </div>
+
+    <!-- 4. Halaman Pengaturan -->
+    <div id="page-pengaturan" class="content-area">
+        <h2>Setting</h2>
+        <p>My Sosial Media</p>
+        <div class="tombol-tambah">
+          <button onclick="Github()">MY GITHUB</button></div>
+        <span>SOURCE CODE IN GITHUB!</span>
+    </div>
+
+    <script>
+      alert("[+] Add\n \n1. Add Custom Jadwal!\n \n[!] Not Update\n \n1. Still No Backend")
+        const links = document.querySelectorAll('.menu-link');
+        const indicator = document.getElementById('indicator');
+        const pages = document.querySelectorAll('.content-area');
+
+        function moveIndicator(activeLink) {
+            indicator.style.left = `${activeLink.offsetLeft}px`;
+            indicator.style.width = `${activeLink.offsetWidth}px`;
+        }
+
+        const initialActive = document.querySelector('.menu-link.active');
+        if (initialActive) {
+            setTimeout(() => moveIndicator(initialActive), 50);
+        }
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                links.forEach(btn => btn.classList.remove('active'));
+                link.classList.add('active');
+                moveIndicator(link);
+
+                const targetPageId = link.getAttribute('data-target');
+                pages.forEach(page => {
+                    page.classList.remove('active'); 
+                });
+                document.getElementById(targetPageId).classList.add('active'); 
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            const currentActive = document.querySelector('.menu-link.active');
+            if (currentActive) moveIndicator(currentActive);
+        });
+      function Jadwal(){
+  window.open("https://basejd.netlify.app/");
+      }
+      function Github(){
+        window.open('https://github.com/nopriv01-droid');
+      }
+      function Game(){
+        window.open("https://games-beta.netlify.app/");
+      }
+      function Simpel(){
+        window.open("removed.html")
+      }
+
+      const nama1 = localStorage.getItem("userS");
+      const nama2 = localStorage.getItem("passS");
+
+      document.getElementById("user").innerText = " " + nama1;
+      document.getElementById("pass").innerText = " " + nama2;
+    </script>
+</body>
+</html>
